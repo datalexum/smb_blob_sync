@@ -12,6 +12,7 @@ paperless_host = os.environ['PAPERLESS_HOST']
 azure_conn_str = os.environ['AZURE_CONN_STR']
 document_container_name = os.environ['DOCUMENT_CONTAINER']
 document_metadata_container_name = os.environ['DOCUMENT_METADATA_CONTAINER']
+last_idx_file_path = os.environ['VOLUME_PATH'] + "/last_file.txt"  # /data/persist
 
 encryption_key = os.environ['ENCRYPTION_KEY']
 
@@ -39,7 +40,7 @@ def get_all_documents():
     all_results = []
 
     try:
-        with open('last_file.txt', 'r') as file:
+        with open(last_idx_file_path, 'r') as file:
             last_idx = int(file.read())
     except FileNotFoundError:
         last_idx = -1
@@ -74,7 +75,7 @@ def get_all_documents():
 
     if len(all_results) != 0:
         last_idx = max([result["id"] for result in all_results])
-        with open("last_file.txt", "w") as f:
+        with open(last_idx_file_path, "w") as f:
             f.write(str(last_idx))
 
 
